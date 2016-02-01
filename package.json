@@ -1,0 +1,19 @@
+{
+  "name": "basic-js-raytracer",
+  "version": "1.0.0",
+  "description": "a basic raytracer in javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonThiele/basic-js-raytracer.git"
+  },
+  "author": "Simon Thiele simon@instana.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simonThiele/basic-js-raytracer/issues"
+  },
+  "homepage": "https://github.com/simonThiele/basic-js-raytracer#readme"
+}
