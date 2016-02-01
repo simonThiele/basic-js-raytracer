@@ -4,6 +4,7 @@
   "description": "a basic raytracer in javascript",
   "main": "index.js",
   "scripts": {
+    "build": "webpack ./src/index.js ./build/index.js",
     "test": ""
   },
   "repository": {
@@ -15,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/simonThiele/basic-js-raytracer/issues"
   },
-  "homepage": "https://github.com/simonThiele/basic-js-raytracer#readme"
+  "homepage": "https://github.com/simonThiele/basic-js-raytracer#readme",
+  "devDependencies": {
+    "babel-core": "^6.4.5",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13",
+    "webpack": "^1.12.12"
+  }
 }

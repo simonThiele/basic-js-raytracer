@@ -2,4 +2,9 @@
 
 ## Intro
 
-to run raytracer, just open index.html file
+``` javascript
+npm install
+npm run build
+```
+
+open index.html file
