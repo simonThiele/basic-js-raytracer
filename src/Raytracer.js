@@ -1,4 +1,7 @@
+var VectorUtils = require('./VectorUtils.js');
 var canvasUtils = require('./canvasUtils.js');
+var Scene = require('./Scene.js');
+var Ray = require('./Ray.js');
 
 module.exports = function Raytracer(canvas) {
   this.canvas = canvas;
@@ -9,14 +12,27 @@ module.exports = function Raytracer(canvas) {
     var height = canvas.height;
     var image = canvasUtils.getImageFromCanvas(canvas);
 
+    var scene = new Scene();
+    scene.loadDefault(width, height);
+
+    // store ray to reduce object creation
+    var primaryRay = new Ray();
+
     for (var x = 0; x < width; x++) {
       for (var y = 0; y < height; y++) {
-        canvasUtils.setPixel(image, x, y,
-          Math.random() * 256 | 0, // r
-          Math.random() * 256 | 0, // g
-          Math.random() * 256 | 0, // b
-          256                      // a
-        );
+
+        var normX = 2 * ((x + 0.5) / width) - 1; // [-1, 1]
+        var normY = 2 * ((y + 0.5) / height) - 1; // [-1, 1]
+
+        primaryRay.position.setV(scene.camera.position);
+        primaryRay.direction.set(
+          normX * scene.camera.aspect,
+          normY,
+          scene.camera.direction.z);
+        primaryRay.direction.normalize();
+
+        var color = scene.traceRay(primaryRay);
+        canvasUtils.setPixel(image, x, y, color.r, color.g, color.b, 255);
       }
     }
 
