@@ -32,15 +32,27 @@ module.exports = function Vector(x, y, z) {
     this.x /= length;
     this.y /= length;
     this.z /= length;
+
+    return this;
   }
 
   this.multiplyScalar = function(scalar) {
     this.x *= scalar;
     this.y *= scalar;
     this.z *= scalar;
+
+    return this;
   }
 
   this.dot = function(vector) {
     return this.x * vector.x + this.y * vector.y + this.z * vector.z;
+  }
+
+  this.clone = function() {
+    return new Vector(
+      this.x,
+      this.y,
+      this.z
+    );
   }
 }

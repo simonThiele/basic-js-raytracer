@@ -59,6 +59,15 @@ describe('Vector', function() {
     checkXYZ(vector, 100, -20, 0);
   });
 
+  it('can be cloned', function () {
+    var vector = new Vector(10, -2 ,0);
+    var vectorClone = vector.clone();
+
+    vector.set(1, 2, 3);
+    checkXYZ(vector, 1, 2, 3);
+    checkXYZ(vectorClone, 10, -2,0 );
+  });
+
   function checkXYZ(vector, expectedX, expectedY, expectedZ) {
     expect(vector.x).to.equal(expectedX);
     expect(vector.y).to.equal(expectedY);

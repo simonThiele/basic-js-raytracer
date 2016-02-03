@@ -1,10 +1,16 @@
+var BasicMaterial = require('../../materials/BasicMaterial.js');
 var VectorUtils = require('../../math/VectorUtils.js');
+var Intersection = require('../../Intersection.js');
 var SceneObject = require('../SceneObject.js');
 
 
-var Sphere = function(radius) {
+var Sphere = function(params) {
   SceneObject.call(this);
-  this.radius = radius;
+
+  params = params || {};
+  this.radius = params.radius;
+  this.material = params.material || new BasicMaterial();
+
 
   // see www.ccs.neu.edu/home/fell/CSU540/programs/RayTracingFormulas.htm
   this.intersectsRay = function(ray) {
@@ -36,8 +42,15 @@ var Sphere = function(radius) {
       // t0: (-B - Math.sqrt(B * B - 4 * C)) / 2,
       // t1: (-B + Math.sqrt(B * B - 4 * C)) / 2
       var t = (-B - Math.sqrt(B * B - 4 * A * C)) / (2 * A);
-      return t;
+      var pointOfIntersection = VectorUtils.add(ray.position, ray.direction.clone().multiplyScalar(t));
+      var normal = VectorUtils.sub(pointOfIntersection, this.position).normalize();
 
+      return new Intersection({
+        point: pointOfIntersection,
+        normal: normal,
+        distance: t,
+        ray: ray
+      });
     }
   }
 };
