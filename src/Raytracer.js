@@ -1,7 +1,8 @@
-var VectorUtils = require('./VectorUtils.js');
+var VectorUtils = require('./math/VectorUtils.js');
 var canvasUtils = require('./canvasUtils.js');
+var Ray = require('./sceneObjects/Ray.js');
 var Scene = require('./Scene.js');
-var Ray = require('./Ray.js');
+
 
 module.exports = function Raytracer(canvas) {
   this.canvas = canvas;
@@ -26,8 +27,8 @@ module.exports = function Raytracer(canvas) {
 
         primaryRay.position.setV(scene.camera.position);
         primaryRay.direction.set(
-          normX * scene.camera.aspect,
-          normY,
+          normX * scene.camera.viewPlaneWidth, // aspect is not needed here anymore
+          normY * scene.camera.viewPlaneHeight,
           scene.camera.direction.z);
         primaryRay.direction.normalize();
 

@@ -1,5 +1,5 @@
-var SceneObject = require('./SceneObject.js');
-var VectorUtils = require('./VectorUtils.js');
+var VectorUtils = require('../../math/VectorUtils.js');
+var SceneObject = require('../SceneObject.js');
 
 
 var Sphere = function(radius) {

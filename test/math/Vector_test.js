@@ -2,7 +2,8 @@ var chai = require('chai');
 var expect = chai.expect;
 var assert = chai.assert;
 
-var Vector = require('../src/Vector.js');
+var Vector = require('../../src/math/Vector.js');
+
 
 describe('Vector', function() {
   it('should have 0 0 0 as default values', function () {

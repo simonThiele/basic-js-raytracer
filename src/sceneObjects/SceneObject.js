@@ -1,4 +1,4 @@
-var Vector = require('./Vector.js');
+var Vector = require('../math/Vector.js');
 
 
 var SceneObject = function() {
