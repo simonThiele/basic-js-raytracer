@@ -39,19 +39,6 @@ var PhongMaterial = function(params) {
        this.albedo.g * pointLight.intensity * pointLight.color.g * (ambientTerm.g + diffuseTerm) + specularTerm,
        this.albedo.b * pointLight.intensity * pointLight.color.b * (ambientTerm.b + diffuseTerm) + specularTerm
     );
-
-
-    const color = new Color(
-      this.albedo.r * diffuseTerm,
-      this.albedo.g * diffuseTerm,
-      this.albedo.b * diffuseTerm
-    );
-
-    color.g += specularTerm * pointLight.color.g * pointLight.intensity;
-    color.r += specularTerm * pointLight.color.r * pointLight.intensity;
-    color.b += specularTerm * pointLight.color.b * pointLight.intensity;
-
-    return color;
   }
 };
 PhongMaterial.prototype = Object.create(LambertMaterial.prototype);
