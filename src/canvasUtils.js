@@ -11,9 +11,9 @@ module.exports = {
 
   setPixel: function(imageData, x, y, r, g, b, a) {
     index = (x + y * imageData.width) * 4;
-    imageData.data[index+0] = r;
-    imageData.data[index+1] = g;
-    imageData.data[index+2] = b;
-    imageData.data[index+3] = a;
+     imageData.data[index+0] = r * 255;
+    imageData.data[index+1] = g * 255;
+    imageData.data[index+2] = b * 255;
+    imageData.data[index+3] = a * 255;
   }
 }

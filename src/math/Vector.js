@@ -17,10 +17,16 @@ module.exports = function Vector(x, y, z) {
     this.x += x;
     this.y += y;
     this.z += z;
+
+    return this;
   }
 
   this.sub = function(x, y, z) {
-    this.add(-x, -y, -z);
+    return this.add(-x, -y, -z);
+  }
+
+  this.subV = function(vector) {
+    return this.add(-vector.x, -vector.y, -vector.z);
   }
 
   this.length = function() {

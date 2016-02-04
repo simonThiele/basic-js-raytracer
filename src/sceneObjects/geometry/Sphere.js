@@ -1,4 +1,4 @@
-var BasicMaterial = require('../../materials/BasicMaterial.js');
+var BasicMaterial = require('../../materials/LambertMaterial.js');
 var VectorUtils = require('../../math/VectorUtils.js');
 var Intersection = require('../../Intersection.js');
 var SceneObject = require('../SceneObject.js');

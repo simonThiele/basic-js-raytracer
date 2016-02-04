@@ -25,6 +25,9 @@ module.exports = function Raytracer(canvas) {
         var normX = 2 * ((x + 0.5) / width) - 1; // [-1, 1]
         var normY = 2 * ((y + 0.5) / height) - 1; // [-1, 1]
 
+        // flip y
+        normY *= -1;
+
         primaryRay.position.setV(scene.camera.position);
         primaryRay.direction.set(
           normX * scene.camera.viewPlaneWidth, // aspect is not needed here anymore
@@ -33,7 +36,7 @@ module.exports = function Raytracer(canvas) {
         primaryRay.direction.normalize();
 
         var color = scene.traceRay(primaryRay);
-        canvasUtils.setPixel(image, x, y, color.r, color.g, color.b, 255);
+        canvasUtils.setPixel(image, x, y, color.r, color.g, color.b, 1);
       }
     }
 

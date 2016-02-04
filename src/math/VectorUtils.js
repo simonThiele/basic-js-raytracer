@@ -13,5 +13,10 @@ module.exports = {
     vector.sub(v2.x, v2.y, v2.z);
 
     return vector;
+  },
+
+  reflect: function(vectorToReflect, normal) {
+    // 2 * (N * L) * N - L
+    return normal.clone().multiplyScalar(2 * normal.dot(vectorToReflect)).subV(vectorToReflect);
   }
 };
