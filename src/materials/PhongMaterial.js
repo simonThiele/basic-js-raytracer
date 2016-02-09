@@ -33,11 +33,14 @@ var PhongMaterial = function(params) {
 
     var diffuseTerm = this.getDiffuseTerm(intersection, pointLight);
 
+    // light intensity
+    var Id = pointLight.getIntensityAtPoint(intersection.point);
+
     // Ia + Id + Is => Ia + Ip · [kd(N · L) + ks(V · R)^n]
     return new Color(
-       this.albedo.r * pointLight.intensity * pointLight.color.r * (ambientTerm.r + diffuseTerm) + specularTerm,
-       this.albedo.g * pointLight.intensity * pointLight.color.g * (ambientTerm.g + diffuseTerm) + specularTerm,
-       this.albedo.b * pointLight.intensity * pointLight.color.b * (ambientTerm.b + diffuseTerm) + specularTerm
+      ambientTerm.r + this.albedo.r * Id * pointLight.color.r * diffuseTerm + specularTerm,
+      ambientTerm.r + this.albedo.g * Id * pointLight.color.g * diffuseTerm + specularTerm,
+      ambientTerm.r + this.albedo.b * Id * pointLight.color.b * diffuseTerm + specularTerm
     );
   }
 };

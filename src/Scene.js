@@ -57,9 +57,9 @@ module.exports = function Scene() {
 
     var pointLight1 = new PointLight({
       color: new Color(1, 1, 1),
-      distance: 5,
+      radius: 2.5,
       intensity: 0.8,
-      position: new Vector(2, 3, -1)
+      position: new Vector(3, 3, -1)
     });
     this.addSceneObject(pointLight1);
   }

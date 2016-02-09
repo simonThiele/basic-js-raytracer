@@ -26,11 +26,14 @@ var LambertMaterial = function(params) {
 
     var diffuseTerm = this.getDiffuseTerm(intersection, pointLight);
 
+    // light intensity
+    var Id = pointLight.getIntensityAtPoint(intersection.point);
+
     // Ia + Id
     return new Color(
-       this.albedo.r * pointLight.intensity * pointLight.color.r * (ambientTerm.r + diffuseTerm),
-       this.albedo.g * pointLight.intensity * pointLight.color.g * (ambientTerm.g + diffuseTerm),
-       this.albedo.b * pointLight.intensity * pointLight.color.b * (ambientTerm.b + diffuseTerm)
+       ambientTerm.r + this.albedo.r * Id * pointLight.color.r * diffuseTerm,
+       ambientTerm.r + this.albedo.g * Id * pointLight.color.g * diffuseTerm,
+       ambientTerm.r + this.albedo.b * Id * pointLight.color.b * diffuseTerm
     );
   }
 };
