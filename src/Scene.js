@@ -2,6 +2,7 @@ var AmbientLight = require('./sceneObjects/lights/AmbientLight.js');
 var PointLight = require('./sceneObjects/lights/PointLight.js');
 var PhongMaterial = require('./materials/PhongMaterial.js');
 var Sphere = require('./sceneObjects/geometry/Sphere.js');
+var Plane = require('./sceneObjects/geometry/Plane.js');
 var Camera = require('./sceneObjects/Camera.js');
 var Vector = require('./math/Vector.js');
 var Color = require('./Color.js');
@@ -51,6 +52,10 @@ module.exports = function Scene() {
     var sphere2 = new Sphere({ radius: 1, material: new PhongMaterial({ shininess: 10 }) });
     sphere2.position.set(1, 0, -3);
     this.addSceneObject(sphere2);
+
+    var plane = new Plane({ distance: 2 });
+    plane.position.set(0, -1, -3);
+    this.addSceneObject(plane);
 
     var ambientLight = new AmbientLight({ color: new Color(0.1, 0.1, 0.1) });
     this.addSceneObject(ambientLight);
