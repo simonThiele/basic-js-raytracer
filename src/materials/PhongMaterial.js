@@ -22,11 +22,6 @@ var PhongMaterial = function(params) {
     // reflected light vecotr
     var R = VectorUtils.reflect(L, intersection.normal).normalize();
 
-    var ambientTerm = new Color();
-    scene.ambientLights.forEach(function(ambientLight) {
-      ambientTerm.add(ambientLight.color);
-    })
-
     // Ip * ks * (V * R)^n
     var ks = 1;
     var specularTerm = ks * Math.pow(Math.max(0, V.dot(R)), this.shininess);
@@ -38,9 +33,9 @@ var PhongMaterial = function(params) {
 
     // Ia + Id + Is => Ia + Ip · [kd(N · L) + ks(V · R)^n]
     return new Color(
-      ambientTerm.r + this.albedo.r * Id * pointLight.color.r * diffuseTerm + specularTerm,
-      ambientTerm.r + this.albedo.g * Id * pointLight.color.g * diffuseTerm + specularTerm,
-      ambientTerm.r + this.albedo.b * Id * pointLight.color.b * diffuseTerm + specularTerm
+      this.albedo.r * Id * pointLight.color.r * diffuseTerm + specularTerm,
+      this.albedo.g * Id * pointLight.color.g * diffuseTerm + specularTerm,
+      this.albedo.b * Id * pointLight.color.b * diffuseTerm + specularTerm
     );
   }
 };

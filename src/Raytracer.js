@@ -1,4 +1,3 @@
-var VectorUtils = require('./math/VectorUtils.js');
 var canvasUtils = require('./canvasUtils.js');
 var Ray = require('./sceneObjects/Ray.js');
 var Scene = require('./Scene.js');

@@ -5,8 +5,8 @@ module.exports = function Vector(r, g, b) {
 
 
   this.add = function(color2) {
-    this.r += Math.min(1, color2.r);
-    this.g += Math.min(1, color2.g);
-    this.b += Math.min(1, color2.b);
+    this.r = Math.min(1, this.r + color2.r);
+    this.g = Math.min(1, this.g + color2.g);
+    this.b = Math.min(1, this.b + color2.b);
   }
 }

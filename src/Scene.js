@@ -1,5 +1,6 @@
 var AmbientLight = require('./sceneObjects/lights/AmbientLight.js');
 var PointLight = require('./sceneObjects/lights/PointLight.js');
+var LambertMaterial = require('./materials/LambertMaterial.js');
 var PhongMaterial = require('./materials/PhongMaterial.js');
 var Sphere = require('./sceneObjects/geometry/Sphere.js');
 var Plane = require('./sceneObjects/geometry/Plane.js');
@@ -10,13 +11,13 @@ var Color = require('./Color.js');
 
 module.exports = function Scene() {
   this.sceneObjects = [];
-  this.ambientLights = [];
+  this.ambientTerm = new Color(0, 0, 0);
   this.lights = [];
 
 
   this.addSceneObject = function(object) {
     if (object instanceof AmbientLight) {
-      this.ambientLights.push(object);
+      this.ambientTerm.add(object.color);
     } else if (object instanceof PointLight) {
       this.lights.push(object);
     } else {
@@ -25,18 +26,28 @@ module.exports = function Scene() {
   }
 
   this.traceRay = function(ray) {
+    var intersections = [];
     for (var i = 0; i < this.sceneObjects.length; i++) {
       var sceneObject = this.sceneObjects[i];
       var intersection = sceneObject.intersectsRay(ray);
       if (intersection) {
-        // the basic pixel color at this point
-        const color = sceneObject.material.getColorForIntersection(intersection, this);
-
-        return color;
+        intersections.push({
+          intersection: intersection,
+          sceneObject: sceneObject
+        });
       }
     }
 
-    return new Color(Math.random(), Math.random(), Math.random());
+    if (intersections.length === 0) {
+      return new Color(Math.random(), Math.random(), Math.random());
+    }
+
+    var closest = intersections.sort(function(a, b) { return a.distance > b.distance; })[0];
+    const pixelColor = closest.sceneObject.material.getColorForIntersection(closest.intersection, this);
+
+    // Ia + ...
+    pixelColor.add(this.ambientTerm);
+    return pixelColor;
   }
 
   this.loadDefault = function(width, height) {
@@ -45,15 +56,31 @@ module.exports = function Scene() {
     this.camera.direction.set(0, 0, -1);
     this.camera.direction.normalize();
 
-    var sphere = new Sphere({ radius: 1 });
+    var sphere = new Sphere({
+      radius: 1,
+      material: new LambertMaterial({
+        color: new Color(0, 1, 0)
+      })
+    });
     sphere.position.set(-1, 0, -3);
     this.addSceneObject(sphere);
 
-    var sphere2 = new Sphere({ radius: 1, material: new PhongMaterial({ shininess: 10 }) });
+    var sphere2 = new Sphere({
+      radius: 1,
+      material: new PhongMaterial({
+        shininess: 10,
+        color: new Color(1, 0, 0)
+      })
+    });
     sphere2.position.set(1, 0, -3);
     this.addSceneObject(sphere2);
 
-    var plane = new Plane({ distance: 2 });
+    var plane = new Plane({
+      distance: 2,
+      material: new LambertMaterial({
+        color: new Color(0, 0, 1)
+      })
+    });
     plane.position.set(0, -1, -3);
     this.addSceneObject(plane);
 
