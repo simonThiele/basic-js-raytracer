@@ -9,19 +9,25 @@ var LambertMaterial = function(params) {
 LambertMaterial.prototype.constructor = LambertMaterial;
 
 LambertMaterial.prototype.getColorForIntersection = function(intersection, scene) {
-  var pointLight = scene.lights[0];
+  var numLights = scene.lights.length;
+  var r = 0;
+  var g = 0;
+  var b = 0;
+  for (var i = 0; i < numLights; i++) {
+    var pointLight = scene.lights[i];
 
-  var diffuseTerm = this.getDiffuseTerm(intersection, pointLight);
+    var diffuseTerm = this.getDiffuseTerm(intersection, pointLight);
 
-  // light intensity
-  var Id = pointLight.getIntensityAtPoint(intersection.point);
+    // light intensity
+    var Id = pointLight.getIntensityAtPoint(intersection.point);
 
-  // Ia + Id
-  return new Color(
-     this.albedo.r * Id * pointLight.color.r * diffuseTerm,
-     this.albedo.g * Id * pointLight.color.g * diffuseTerm,
-     this.albedo.b * Id * pointLight.color.b * diffuseTerm
-  );
+    // Ia + Id
+    r += this.albedo.r * Id * pointLight.color.r * diffuseTerm;
+    g += this.albedo.g * Id * pointLight.color.g * diffuseTerm;
+    b += this.albedo.b * Id * pointLight.color.b * diffuseTerm;
+  }
+
+  return new Color(r, g, b).multiplyScalar(1 / numLights);
 };
 
 LambertMaterial.prototype.getDiffuseTerm = function(intersection, light) {
@@ -32,6 +38,6 @@ LambertMaterial.prototype.getDiffuseTerm = function(intersection, light) {
 
   var kd = 1;
   return kd * Math.max(0, L.multiplyScalar(-1).dot(intersection.normal));
-}
+};
 
 module.exports = LambertMaterial;

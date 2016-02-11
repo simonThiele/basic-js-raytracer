@@ -16,4 +16,4 @@ module.exports = {
     imageData.data[index + 2] = (b * 255) | 0;
     imageData.data[index + 3] = (a * 255) | 0;
   }
-}
+};

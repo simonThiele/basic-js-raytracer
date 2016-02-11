@@ -12,28 +12,28 @@ var Plane = function(params) {
   this.normal = params.normal || new Vector(0, 1, 0);
   this.distance = params.distance;
   this.material = params.material || new BasicMaterial();
-
-
-  // see www.ccs.neu.edu/home/fell/CSU540/programs/RayTracingFormulas.htm
-  this.intersectsRay = function(ray) {
-    const dot = this.normal.dot(ray.direction);
-
-    if (dot >= 0) {
-      return false;
-    }
-
-    var t = -(ray.position.dot(this.normal) + this.distance) / dot;
-    var pointOfIntersection = VectorUtils.add(ray.position, ray.direction.clone().multiplyScalar(t));
-
-    return new Intersection({
-      point: pointOfIntersection,
-      normal: this.normal,
-      distance: t,
-      ray: ray
-    });
-  }
 };
+
 Plane.prototype = new SceneObject();
 Plane.prototype.constructor = Plane;
+
+// see www.ccs.neu.edu/home/fell/CSU540/programs/RayTracingFormulas.htm
+Plane.prototype.intersectsRay = function(ray) {
+  const dot = this.normal.dot(ray.direction);
+
+  if (dot >= 0) {
+    return false;
+  }
+
+  var t = -(ray.position.dot(this.normal) + this.distance) / dot;
+  var pointOfIntersection = VectorUtils.add(ray.position, ray.direction.clone().multiplyScalar(t));
+
+  return new Intersection({
+    point: pointOfIntersection,
+    normal: this.normal,
+    distance: t,
+    ray: ray
+  });
+};
 
 module.exports = Plane;

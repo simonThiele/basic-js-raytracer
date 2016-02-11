@@ -12,6 +12,7 @@ var Logger = function(maxLogsToWrite) {
     console.log(arguments);
   }
 };
+
 Logger.prototype.constructor = Logger;
 
 var logger = new Logger(10);
