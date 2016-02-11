@@ -1,6 +1,6 @@
+var DefaultScene = require('./scenes/DefaultScene.js');
 var canvasUtils = require('./canvasUtils.js');
 var Ray = require('./sceneObjects/Ray.js');
-var Scene = require('./Scene.js');
 
 
 module.exports = function Raytracer(canvas) {
@@ -12,8 +12,8 @@ module.exports = function Raytracer(canvas) {
     var height = canvas.height;
     var image = canvasUtils.getImageFromCanvas(canvas);
 
-    var scene = new Scene();
-    scene.loadDefault(width, height);
+    var scene = new DefaultScene();
+    scene.load(width, height);
 
     // store ray to reduce object creation
     var primaryRay = new Ray();
@@ -34,7 +34,7 @@ module.exports = function Raytracer(canvas) {
           scene.camera.direction.z);
         primaryRay.direction.normalize();
 
-        var color = scene.traceRay(primaryRay);
+        var color = scene.traceRay(primaryRay, 0);
         canvasUtils.setPixel(image, x, y, color.r, color.g, color.b, 1);
       }
     }

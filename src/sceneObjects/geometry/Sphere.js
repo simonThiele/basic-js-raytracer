@@ -1,3 +1,5 @@
+var logger = require('../../utils/Logger.js');
+
 var BasicMaterial = require('../../materials/LambertMaterial.js');
 var VectorUtils = require('../../math/VectorUtils.js');
 var Intersection = require('../../Intersection.js');
@@ -42,6 +44,11 @@ var Sphere = function(params) {
       // t0: (-B - Math.sqrt(B * B - 4 * C)) / 2,
       // t1: (-B + Math.sqrt(B * B - 4 * C)) / 2
       var t = (-B - Math.sqrt(B * B - 4 * A * C)) / (2 * A);
+
+      // if t < 0 : the sphere was hitten behind the ray
+      if (t <= 0) {
+        return false;
+      }
       var pointOfIntersection = VectorUtils.add(ray.position, ray.direction.clone().multiplyScalar(t));
       var normal = VectorUtils.sub(pointOfIntersection, this.position).normalize();
 

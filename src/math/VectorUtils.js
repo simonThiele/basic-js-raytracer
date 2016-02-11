@@ -15,8 +15,9 @@ module.exports = {
     return vector;
   },
 
-  reflect: function(vectorToReflect, normal) {
-    // 2 * (N * L) * N - L
-    return normal.clone().multiplyScalar(2 * normal.dot(vectorToReflect)).subV(vectorToReflect);
+  // nvidia reference implementation: http://http.developer.nvidia.com/Cg/reflect.html
+  reflect: function(i, n) {
+    // i - 2.0 * n * dot(n,i);
+    return this.sub(i, n.clone().multiplyScalar(2 * n.dot(i)));
   }
 };

@@ -29,6 +29,10 @@ module.exports = function Vector(x, y, z) {
     return this.add(-vector.x, -vector.y, -vector.z);
   }
 
+  this.addV = function(vector) {
+    return this.add(vector.x, vector.y, vector.z);
+  }
+
   this.length = function() {
     return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
   }
