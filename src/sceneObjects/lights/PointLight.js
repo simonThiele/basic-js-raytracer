@@ -25,7 +25,7 @@ var PointLight = function(params) {
     return attenuation;
   }
 };
-PointLight.prototype = Object.create(BasicLight.prototype);
+PointLight.prototype = new BasicLight();
 PointLight.prototype.constructor = PointLight;
 
 module.exports = PointLight;

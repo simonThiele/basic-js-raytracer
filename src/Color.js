@@ -12,6 +12,14 @@ module.exports = function Vector(r, g, b) {
     return this;
   }
 
+  this.addScalar = function(scalar) {
+    this.r = Math.min(1, this.r + scalar);
+    this.g = Math.min(1, this.g + scalar);
+    this.b = Math.min(1, this.b + scalar);
+
+    return this;
+  }
+
   this.multiplyScalar = function(scalar) {
     this.r = Math.min(1, this.r * scalar);
     this.g = Math.min(1, this.g * scalar);

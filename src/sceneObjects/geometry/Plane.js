@@ -33,7 +33,7 @@ var Plane = function(params) {
     });
   }
 };
-Plane.prototype = Object.create(SceneObject.prototype);
+Plane.prototype = new SceneObject();
 Plane.prototype.constructor = Plane;
 
 module.exports = Plane;

@@ -12,7 +12,7 @@ var Camera = function(fov, aspect) {
   this.viewPlaneHeight = 2 * Math.tan(this.fov / 2);
   this.viewPlaneWidth = this.viewPlaneHeight * this.aspect;
 };
-Camera.prototype = Object.create(SceneObject.prototype);
+Camera.prototype = new SceneObject();
 Camera.prototype.constructor = Camera;
 
 module.exports = Camera;

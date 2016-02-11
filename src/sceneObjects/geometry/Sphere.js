@@ -61,7 +61,7 @@ var Sphere = function(params) {
     }
   }
 };
-Sphere.prototype = Object.create(SceneObject.prototype);
+Sphere.prototype = new SceneObject();
 Sphere.prototype.constructor = Sphere;
 
 module.exports = Sphere;

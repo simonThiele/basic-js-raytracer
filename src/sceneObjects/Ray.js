@@ -7,7 +7,7 @@ var Ray = function() {
   this.direction = new Vector();
 }
 
-Ray.prototype = Object.create(SceneObject.prototype);
+Ray.prototype = new SceneObject();
 Ray.prototype.constructor = Ray;
 
 module.exports = Ray;

@@ -60,7 +60,7 @@ var DefaultScene = function(fov, aspect) {
     this.addSceneObject(pointLight1);
   }
 };
-DefaultScene.prototype = Object.create(Scene.prototype);
+DefaultScene.prototype = new Scene();
 DefaultScene.prototype.constructor = DefaultScene;
 
 module.exports = DefaultScene;
