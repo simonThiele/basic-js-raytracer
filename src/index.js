@@ -3,8 +3,8 @@
 var Raytracer = require('./Raytracer.js');
 
 var canvas = document.getElementById('mainScene');
-canvas.width = 600;
-canvas.height = 400;
+canvas.width = 800;
+canvas.height = 600;
 // canvas.width = window.innerWidth;
 // canvas.height = window.innerHeight;
 

@@ -47,9 +47,8 @@ Scene.prototype.traceRay = function(ray, reflectionRecursionCounter) {
     }
   }
 
-  // if all lights are not visible
+  // if all lights are not visible -> return black
   if (numLightsNotVisible === numLights) {
-    // if not -> set shadow
     return black;
   }
 
@@ -57,6 +56,7 @@ Scene.prototype.traceRay = function(ray, reflectionRecursionCounter) {
   const pixelColor = closest.sceneObject.material.getColorForIntersection(closest.intersection, this, reflectionRecursionCounter);
   var shadowColor = black.clone();
 
+  // if 5 of 7 lights are visible, the pixelColor get a weight by 5/7 and the shadow by 2/7
   pixelColor.multiplyScalar((numLights - numLightsNotVisible) / numLights);
   shadowColor.multiplyScalar(numLightsNotVisible / numLights);
 
@@ -97,7 +97,7 @@ Scene.prototype.getClosestIntersection = function(ray) {
     return undefined;
   }
 
-  return intersections.sort(function(a, b) { return a.distance > b.distance; })[0];
+  return intersections.sort(function(a, b) { return a.intersection.distance > b.intersection.distance; })[0];
 };
 
 module.exports = Scene;

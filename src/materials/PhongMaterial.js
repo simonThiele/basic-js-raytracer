@@ -12,7 +12,7 @@ var PhongMaterial = function(params) {
 
   params = params || {};
   this.shininess = params.shininess || 1;
-  this.reflection = Math.min(1, Math.max(0, params.reflection || 0.5)); // [0, 1]
+  this.reflection = Math.min(1, Math.max(0, params.reflection || 0.4)); // [0, 1]
 };
 
 PhongMaterial.prototype = new LambertMaterial();
@@ -20,6 +20,7 @@ PhongMaterial.prototype.constructor = PhongMaterial;
 
 PhongMaterial.prototype.getColorForIntersection = function(intersection, scene, reflectionRecursionCounter) {
   var numLights = scene.lights.length;
+  var allSpec = 0;
   var r = 0;
   var g = 0;
   var b = 0;
@@ -38,7 +39,7 @@ PhongMaterial.prototype.getColorForIntersection = function(intersection, scene, 
 
     // Ip * ks * (V * R)^n
     var ks = 1;
-    var specularTerm = ks * Math.pow(Math.max(0, V.dot(R)), this.shininess);
+    allSpec += ks * Math.pow(Math.max(0, V.dot(R)), this.shininess);
 
     // Ia + Id + Is => Ia + Ip · [kd(N · L) + ks(V · R)^n]
     var diffuseTerm = this.getDiffuseTerm(intersection, pointLight);
@@ -48,9 +49,9 @@ PhongMaterial.prototype.getColorForIntersection = function(intersection, scene, 
 
     // Ia + Id
     var localColor = new Color(
-      this.albedo.r * Id * pointLight.color.r * diffuseTerm + specularTerm,
-      this.albedo.g * Id * pointLight.color.g * diffuseTerm + specularTerm,
-      this.albedo.b * Id * pointLight.color.b * diffuseTerm + specularTerm
+      this.albedo.r * Id * pointLight.color.r * diffuseTerm,
+      this.albedo.g * Id * pointLight.color.g * diffuseTerm,
+      this.albedo.b * Id * pointLight.color.b * diffuseTerm
     );
 
     if (this.reflection === 0) {
@@ -70,7 +71,11 @@ PhongMaterial.prototype.getColorForIntersection = function(intersection, scene, 
     b += localColor.b;
   }
 
-  return new Color(r, g, b).multiplyScalar(1 / numLights);
+  var color = new Color(r, g, b).multiplyScalar(1 / numLights);
+  color.r += allSpec;
+  color.g += allSpec;
+  color.b += allSpec;
+  return color;
 };
 
 PhongMaterial.prototype.getReflectedRay = function(intersection) {
