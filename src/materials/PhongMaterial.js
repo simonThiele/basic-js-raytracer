@@ -7,18 +7,23 @@ var Vector = require('../math/Vector.js');
 var Color = require('../Color.js');
 
 
+var black = new Color(0, 0, 0);
+
 var PhongMaterial = function(params) {
   LambertMaterial.call(this, params);
 
   params = params || {};
   this.shininess = params.shininess || 1;
-  this.reflection = Math.min(1, Math.max(0, params.reflection || 0.4)); // [0, 1]
+  this.reflection = Math.min(1, Math.max(0, params.reflection || 0.5)); // [0, 1]
+  this.refraction = Math.min(1, Math.max(0, params.refraction || 0)); // [0, 1]
 };
 
 PhongMaterial.prototype = new LambertMaterial();
 PhongMaterial.prototype.constructor = PhongMaterial;
 
-PhongMaterial.prototype.getColorForIntersection = function(intersection, scene, reflectionRecursionCounter) {
+PhongMaterial.prototype.getColorForIntersection = function(intersection,
+                                                           scene,
+                                                           reflectionRecursionCounter) {
   var numLights = scene.lights.length;
   var allSpec = 0;
   var r = 0;
@@ -54,17 +59,22 @@ PhongMaterial.prototype.getColorForIntersection = function(intersection, scene, 
       this.albedo.b * Id * pointLight.color.b * diffuseTerm
     );
 
-    if (this.reflection === 0) {
-      continue;
+    if (this.reflection > 0) {
+      var reflectedPrimaryRay = this.getReflectedRay(intersection);
+      var reflectedColor = this.getReflectiveColor(reflectedPrimaryRay, scene, reflectionRecursionCounter);
+      localColor.multiplyScalar(1 - this.reflection);
+      reflectedColor.multiplyScalar(this.reflection);
+      localColor.add(reflectedColor);
     }
 
-    var reflectedPrimaryRay = this.getReflectedRay(intersection);
-    var reflectedColor = this.getReflectiveColor(reflectedPrimaryRay, scene, reflectionRecursionCounter);
+    if (this.refraction > 0) {
+      var refractionPrimaryRay = this.getRefractionRay(intersection);
+      var refractedColor = this.getRefractiveColor(refractionPrimaryRay, scene, reflectionRecursionCounter);
+      refractedColor.multiplyScalar(this.refraction);
 
-    localColor.multiplyScalar(1 - this.reflection);
-    reflectedColor.multiplyScalar(this.reflection);
-
-    localColor.add(reflectedColor);
+      localColor.multiplyScalar(1 - this.refraction);
+      localColor.add(refractedColor);
+    }
 
     r += localColor.r;
     g += localColor.g;
@@ -89,8 +99,25 @@ PhongMaterial.prototype.getReflectedRay = function(intersection) {
   return R;
 };
 
+PhongMaterial.prototype.getRefractionRay = function(intersection) {
+  var R = new Ray();
+
+  R.position.setV(intersection.point);
+
+  var reflectedVector = VectorUtils.refract(intersection.ray.direction, intersection.normal, 0.5).normalize();
+  R.direction.setV(reflectedVector);
+
+  R.position.addV(R.direction.clone().multiplyScalar(0.001));
+
+  return R;
+};
+
 PhongMaterial.prototype.getReflectiveColor = function(reflectedRay, scene, reflectionRecursionCounter) {
   return scene.traceRay(reflectedRay, ++reflectionRecursionCounter);
+};
+
+PhongMaterial.prototype.getRefractiveColor = function(reflectedRay, scene, reflectionRecursionCounter) {
+  return new Color(0, 0, 0);
 };
 
 module.exports = PhongMaterial;

@@ -5,7 +5,8 @@ var Vector = require('../math/Vector.js');
 var Color = require('../Color.js');
 
 
-var maxReflectionRecursiveCounter = 1;
+var maxReflectionRecursiveCounter = 2;
+var maxRefractionRecursiveCounter = 0;
 var black = new Color(0, 0, 0);
 
 var Scene = function() {

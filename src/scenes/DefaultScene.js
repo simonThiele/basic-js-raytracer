@@ -28,7 +28,7 @@ DefaultScene.prototype.load = function(width, height) {
     radius: 1,
     material: new PhongMaterial({
       shininess: 15,
-      reflection: 0.4,
+      reflection: 0.9,
       color: new Color(1, 1, 1)
     })
   });
