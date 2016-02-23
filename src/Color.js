@@ -28,6 +28,14 @@ Color.prototype.multiplyScalar = function(scalar) {
   return this;
 };
 
+Color.prototype.multiplyComponents = function(color2) {
+  this.r *= color2.r;
+  this.g *= color2.g;
+  this.b *= color2.b;
+
+  return this;
+};
+
 Color.prototype.clone = function() {
   return new Color(this.r, this.g, this.b);
 };

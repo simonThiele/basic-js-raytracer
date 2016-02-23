@@ -4,10 +4,12 @@ var Ray = require('../sceneObjects/Ray.js');
 var Vector = require('../math/Vector.js');
 var Color = require('../Color.js');
 
+var logger = require('../utils/Logger.js');
 
 var maxReflectionRecursiveCounter = 2;
 var maxRefractionRecursiveCounter = 0;
 var black = new Color(0, 0, 0);
+var white = new Color(1, 1, 1);
 
 var Scene = function() {
   this.sceneObjects = [];
@@ -61,11 +63,15 @@ Scene.prototype.traceRay = function(ray, reflectionRecursionCounter) {
   pixelColor.multiplyScalar((numLights - numLightsNotVisible) / numLights);
   shadowColor.multiplyScalar(numLightsNotVisible / numLights);
 
-  var finalColor = pixelColor.add(shadowColor);
+  var localColor = pixelColor.add(shadowColor);
+
+  var AOIntensity = this.getAmbientOcclusionIntensity(closest.intersection);
+
+  localColor.multiplyScalar(AOIntensity);
 
   // Ia + ...
-  finalColor.add(this.ambientTerm);
-  return finalColor;
+  localColor.add(this.ambientTerm);
+  return localColor;
 };
 
 Scene.prototype.getLightRay = function(light, position) {
@@ -100,5 +106,42 @@ Scene.prototype.getClosestIntersection = function(ray) {
 
   return intersections.sort(function(a, b) { return a.intersection.distance > b.intersection.distance; })[0];
 };
+
+Scene.prototype.getAmbientOcclusionIntensity = function(intersection) {
+  // settings
+  var samples = 8;
+  var maxDistance = 1;
+
+  var AOIntensity = 1;
+
+  // reuse object
+  var sampleRay = new Ray();
+
+  for (var i = 0; i < samples; i++) {
+    // create hemisphere
+    // sample it with settings.AORays samples http://mathworld.wolfram.com/SpherePointPicking.html
+    var O0 = 2 * Math.PI * Math.random();
+    var u = Math.random() * 2 - 1;
+    var sampleDirection = new Vector(
+      Math.sqrt(1 - u * u) * Math.cos(O0),
+      Math.sqrt(1 - u * u) * Math.sin(O0),
+      u
+    );
+
+    // create a ray for each of the samples
+    sampleRay.position.setV(intersection.point);
+    sampleRay.direction.setV(sampleDirection);
+    sampleRay.position.addV(sampleRay.direction.clone().multiplyScalar(0.001));
+
+    // does the ray hit something ?
+    // no -> finalColor += white * 1 / settings.AORays
+    var closest = this.getClosestIntersection(sampleRay);
+    if (closest && closest.intersection.distance <= maxDistance) {
+      AOIntensity -= (maxDistance - closest.intersection.distance) / samples;
+    }
+  }
+
+  return AOIntensity;
+}
 
 module.exports = Scene;
